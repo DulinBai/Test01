@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>login</title>
+		<link rel="stylesheet" href="../static/login.css"/>
+		<link rel="stylesheet" href="../static/normal.css" />
+
+	</head>
+
+
+	<body>
+		<div class="page">
+
+
+
+			<!--页眉，西电图标-->
+			<header id="hder">
+				<img id="img01" src="../static/logo_tran@50px.png" width="359" height="80" />
+			</header>
+			<!--页眉结束-->
+
+			<!--主体部分 -->
+			<div class="container">
+				<h1 id="title">欢迎登陆云访问控制管理系统</h1>
+
+				<!--输入文本框 -->
+				<form method="post" id="input">{% csrf_token %}
+					<fieldset>
+						<h2 class="hdr-account">登录</h2>
+						<div class="fields">
+							<p class="row">
+								<label for="id_num">账&nbsp;&nbsp;&nbsp;号：</label>
+								<input type="text" id="id_num" name="id_num" class="field-large"  autofocus />
+							</p>
+							<p class="row">
+								<label for="password_based">密&nbsp;&nbsp;&nbsp;码：</label>
+								<input type="password" id="password_based" name="password_based" class="field-large"  required />
+							</p>
+						</div>
+					</fieldset>
+
+				<!--提交按钮-->
+				<input type="submit" value="登录" id="btn1"/><!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+				<a href="../authenticate/"><input type="button" value="认证" id="btn2"/></a>
+				<!--结束提交按钮-->
+
+				</form>
+			<!--结束输入文本框-->
+
+			</div>
+			<!--主体部分结束-->
+
+		</div>
+    <script type="text/javascript" src="../static/login.js"></script>
+	</body>
+
+</html>

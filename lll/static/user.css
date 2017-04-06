@@ -1,0 +1,107 @@
+html{
+	min-height: 100%;
+}
+#img01{
+	height: 55px;
+}
+
+.hed{
+	background-color: #1a8fb4;
+	
+ 
+}
+
+
+.span9{
+	display: inline-block;
+	margin: 0;
+	width: 80%;
+
+}
+
+.span3{
+	margin: 0;
+	width: 20%;
+	height: 770px;
+	background-color: #D8D8D8;
+
+}
+
+li{
+	font-size: larger;
+}
+
+#title{
+	font-size: 20px;
+}
+
+
+.tab-user{
+	margin: 90px auto;
+	margin-bottom: 30px;
+}
+#tab1{
+	border: 1px solid 	#C0C0C0;
+	font-size: larger;
+	font-weight: bold;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	background-color: #F5F5F5;
+}
+.tab-user td{
+	border: 1px solid 	#C0C0C0;
+	font-size: larger;
+	width: 420px;
+	height: 2em;
+	text-align: center;
+}
+.tab-user th{
+	border: 1px solid 	#C0C0C0;
+	font-size: larger;
+	width: 200px;
+	height: 2em;
+	text-align: left;
+	padding-left: 2em;  
+}
+
+
+.tab-file{
+	margin: 0 auto;
+}
+#tab2{
+	border: 1px solid 	#C0C0C0;
+	font-size: larger;
+	font-weight: bold;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	background-color: #F5F5F5;
+}
+.tab-file th{
+	border: 1px solid 	#C0C0C0;
+	font-size: larger;
+	width: 150px;
+	height: 2em;
+	text-align: left;
+	padding-left: 0.5em; 
+}
+.tab-file #th01{
+	width: 170px;
+}
+.tab-file td{
+	border: 1px solid 	#C0C0C0;
+	font-size: larger;
+	width: 150px;
+	height: 2em;
+	text-align: left;
+	padding-left: 0.5em; 
+}
+.tab-file #th02{
+	width: 170px;
+}
+
+#pointer1{
+		cursor: pointer;
+}
+#pointer2{
+		cursor: pointer;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>register</title>
+		<link rel="stylesheet" href="../static/css/normal.css" />
+		<link rel="stylesheet" href="../static/css/register.css" />
+		<link rel="stylesheet" href="../static/css/xcConfirm.css" />
+
+	</head>
+	<body>
+		<div class="page">
+
+
+
+			<!--页眉，西电图标-->
+			<header id="hder">
+				<img id="img01" src="../static/img/logo_tran@50px.png" width="359" height="80" />
+			</header>
+			<!--页眉结束-->
+
+			<!--主体部分 -->
+			<div class="container">
+				<h1 id="title">注册用户账号</h1>
+				<!--输入文本框 -->
+				<form method="post" id="input3" >
+					<fieldset>
+						<h2 class="hdr-account">注册</h2>
+						<div class="fields">
+							<p class="row">
+								<label for="username3">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+								<input type="text" id="username3" name="username3" class="field-large" required autofocus />
+							</p>
+							<p class="row">
+								<label for="uname">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+								<input type="text" id="uname" name="uname" class="field-large" required autofocus/>
+							</p>
+							<p class="row">
+								<label for="gender">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label>
+								<select id="gender" name="gender">
+									<option value="male">男性</option>
+									<option value="female">女性</option>
+								</select>
+							</p>
+							<p class="row">
+								<label for="unit">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</label>
+								<select id="unit" name="unit">
+									<option value="xidian">西安电子科技大学</option>
+									<option value="xijiao">西安交通大学</option>
+									<option value="guidian">桂林电子科技大学</option>
+									<option value="guangda">广西大学</option>
+								</select>
+							</p>
+							<p class="row">
+								<label for="position">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</label>
+								<select id="position" name="position">
+									<option value="student">学生</option>
+									<option value="teacher">教师</option>
+									<option value="director">院长</option>
+									<option value="president">校长</option>
+								</select>
+							</p>
+							<p class="row">
+								<label for="partjob">兼职职位：</label>
+								<select id="partjob" name="partjob">
+									<option value="student">学生</option>
+									<option value="teacher">教师</option>
+									<option value="director">院长</option>
+									<option value="president">校长</option>
+								</select>
+							</p>
+							<p class="row">
+								<label for="scheme">认证方案：</label>
+								<select id="scheme" name="scheme">
+									<option value="token">基于口令</option>
+									<option value="iden">基于身份</option>
+									<option value="RSA">基于RSA算法</option>
+									<option value="ElGam">基于ElGamal算法</option>
+									<option value="ECDSA">基于ECDSA算法</option>
+								</select>
+							</p>
+							<p class="row" id="dispass">
+								<label for="password3">口令密码：</label>
+								<input type="password" id="password3" name="password3" class="field-large" placeholder="仅口令方式需要"  />
+							</p>
+						</div>
+					</fieldset>
+
+				<!--提交按钮-->
+				<input type="submit" value="注册" id="btn1"/>
+
+				</form>
+			<!--结束输入文本框-->
+
+			</div>
+			<!--主体部分结束-->
+
+		</div>
+		<script type="text/javascript">
+		    var confirm_sign=0;
+			function okclick(){
+				if(confirm_sign==1){
+					window.location.href="/authenticate/";
+				}
+				confirm_sign=0;
+			}
+			function cancelclick(){
+				confirm_sign=0;
+			}
+		</script>
+		<script type="text/javascript" src="../static/js/jquery-3.2.0.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.form.js"></script>
+		<script type="text/javascript" src="../static/js/xcConfirm.js"></script>
+		<script type="text/javascript" >
+			var form1 =document.getElementById("input3"); //表单元素
+            var scheme=form1.elements["scheme"];  //认证选择框元素
+            var password1 = document.getElementById("password3");  //密码输入框元素
+            var dispassword =document.getElementById("dispass");  //密码行的段落元素
+
+            var options={
+            	dataType:'json',
+          	success:check3,
+            };
+
+           //选择口令没有填写密码
+           form1.onsubmit=function check1(){
+
+	        if (scheme.value=="token"){
+		        if(password1.value==null||password1.value==""){
+			      //  confirm("请输入密码！ \n 密码为");
+			        window.wxc.xcConfirm("请输入密码！","error");
+			        password1.focus();
+			        return false;
+		        }
+            }
+
+	        $("#input3").ajaxSubmit(options);
+	        return false;
+	        }
+
+            //没有选择口令方式则隐藏口令框
+            scheme.onclick=function check2(){
+	            if(scheme.value!="token"){
+		            dispassword.setAttribute("hidden",true);
+	            }
+	            if(scheme.value=="token"){
+		            dispassword.removeAttribute("hidden");
+	            }
+            }
+
+            //提交成功后的回调函数
+          function check3(data){
+          	var ceradr=data.ceradr;
+          	var keyadr=data.keyadr;
+               if(data.sign){
+         	   confirm_sign=1;
+         	   window.wxc.xcConfirm("恭喜您注册成功！<br>点击下载你的密钥文件：<a href="+keyadr+" download> 密钥</a><br>点击下载你的证书文件：<a href="+ceradr+" download> 证书</a>","success");
+              }
+             if(!data.sign){
+          	   window.wxc.xcConfirm("抱歉！您注册失败，请重新注册！","error");
+              }
+          }
+
+ 		</script>
+	</body>
+</html>

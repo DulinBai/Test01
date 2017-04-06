@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>user</title>
+		<link href="../static/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+		<link href="../static/bootstrap/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="../static/bootstrap/bootstrap.css" rel="stylesheet" />
+		<link href="../static/bootstrap/bootstrap.min.css" rel="stylesheet" />
+		
+		<link href="../static/user.css" rel="stylesheet" />
+
+	</head>
+	<body>
+
+		<div class="span3">
+			<ul class="nav nav-tabs nav-stacked">
+				<li id="title" class="active">
+					<a href="#">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						自助菜单</a>
+				</li>
+				<li class="active">
+					<a href="user.html" id="pointer1">&nbsp&nbsp首页</a>
+				</li>
+				<li class="active">
+					<a href="file.html" id="pointer2">&nbsp&nbsp文件管理</a>
+				</li>
+			</ul>
+		</div>
+		<div class="span9">
+		<header class="hed">
+			<img src="../static/logo_tran@50px.png" id="img01" alt="Responsive image" >
+        </header>
+        <script type="application/javascript">
+            var Piece_dict1 = {{ Piece_dict1|safe }};
+            var Piece_dict2 = {{ Piece_dict2|safe }};
+        	document.write('<table class="tab-user">');
+            document.write('<caption id="tab1">用户信息</caption>');
+
+            document.write('<tr>');
+            document.write('<th>'+"用户名"+'</th><td>'+Piece_dict1.username+'</td>');
+            document.write('</tr>');
+            document.write('<tr>');
+            document.write('<th>'+"性别"+'</th><td>'+Piece_dict1.gender+'</td>');
+            document.write('</tr>');
+            document.write('<tr>');
+            document.write('<th>'+"职务"+'</th><td>'+Piece_dict1.position+'</td>');
+            document.write('</tr>');
+            document.write('<tr>');
+            document.write('<th>'+"工作单位"+'</th><td>'+Piece_dict1.unit+'</td>');
+            document.write('</tr>');
+            document.write('<tr>');
+            document.write('<th>'+"域"+'</th><td>'+Piece_dict1.field+'</td>');
+            document.write('</tr>');
+
+            document.write('</table >');
+
+/*输入文件表格信息*/
+           document.write('<table class="tab-file">');
+           document.write('<caption id="tab2">文件信息</caption>');        
+           document.write('<tr>');
+           document.write('<th>'+"文件名"+'</th><th>'+"文件大小"+'</th><th id="th01">'+"修改时间"+'</th><th>'+"权限"+'</th>');
+           document.write('</tr>');
+           
+           for(i=0;i<Piece_dict2.file_num;i++){
+           document.write('<tr>');
+           document.write('<td>'+Piece_dict2.file[i].filename+'</td><td>'+Piece_dict2.file[i].filesize+'</td><td id="th02">'+Piece_dict2.file[i].modify_time+'</td><td>'+Piece_dict2.file[i].authority+'</td>');
+           document.write('</tr>');
+           }
+
+           document.write('</table >');
+        </script>
+		</div>
+
+	</body>
+</html>

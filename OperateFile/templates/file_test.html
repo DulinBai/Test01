@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>file</title>
+		<link href="../static/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+		<link href="../static/bootstrap/bootstrap.css" rel="stylesheet" />
+		<link href="../static/css/xcConfirm.css" rel="stylesheet" />
+		
+		<link href="../static/file.css" rel="stylesheet" />
+
+	</head>
+	<body>
+
+		<div class="span3">
+			<ul class="nav nav-tabs nav-stacked">
+				<li id="title" class="active">
+					<a href="#"><div align="center">
+                        自助菜单</div></a>
+				</li>
+				<li class="active">
+					<a href="#" id="pointer1">&nbsp&nbsp首页</a>
+				</li>
+				<li class="active">
+					<a href="#" id="pointer2">&nbsp&nbsp文件管理</a>
+				</li>
+			</ul>
+		</div>
+		<div class="span9">
+		<header class="hed">
+			<img src="../static/logo_tran@50px.png" id="img01" alt="Responsive image" >
+        </header>
+        <script type="text/javascript">
+        	var confirm_sign=0;
+        	function okclick(){
+        		
+        		//调用文件编辑函数
+        		if(confirm_sign==1){
+        			editclick();
+        		}
+        		
+        		//调用文件删除函数
+        		if(confirm_sign==2){
+        			deleclick();
+        		}  
+        		
+				confirm_sign=0;				
+			}
+			function cancelclick(){
+				confirm_sign=0;
+			}	
+        </script>
+        <script type="text/javascript" src="../static/jquery-3.2.0.js"></script>
+        <script type="text/javascript" src="../static/jquery.form.js"></script>
+        <script type="text/javascript" src="../static/xcConfirm.js"></script>
+        <script type="text/javascript">
+            
+            /*引入用户信息和文件信息的json文件*/
+            var Piece_dict2 = {{Piece_dict2|safe}};  //用户信息json数据
+            var username01= {{username01|safe}};  //文件信息
+          
+        
+          
+            /*选择框生成函数实际代码*/
+           	/*文件选择框的建立*/
+            document.write('<p id="row"> <label for="file" id="filelb">文件选择：</label> <select id="file" name="file">');
+            document.write('<option value='+"none"+'>'+"请选择文件"+'</option>');
+            for(i=0;i<Piece_dict2.file_num;i++){
+            	document.write('<option value='+"file"+i+'>'+Piece_dict2.file[i].filename+'</option>');
+            }
+            document.write('</select></p>');
+
+                        
+            /*输出框的建立*/
+            document.write('<form method="post" id="form1"><textarea id="filein"></textarea></form>');
+
+            /*按钮的建立*/
+            document.write('<button id="btn1" type="button">编辑</button>');
+            document.write('<button id="btn2" type="button">删除</button>');
+            
+            
+
+            /*选择具体文件后显示文件内容*/
+           var filen=document.getElementById("file");
+           var filecontent = document.getElementById("filein");
+           $("#file").on("change",function(){
+           	if(filen.value=="none"){
+           		window.wxc.xcConfirm("你没有选择文件！","warning");
+		       filecontent.value="";
+	         }
+           	if(filen.value!="none"){
+           		var counter1;
+           		for(i=0;i<Piece_dict2.file_num;i++){
+           			if(filen.value=="file"+i){
+           				counter1=i;
+           			}
+           		};
+           	    
+           	    var options1={
+           	//	beforeSend:check1,  //测试用
+           		success: displayf,
+           		dataType:"json",
+           		type:"post",
+           		data:{filen_read:Piece_dict2.file[counter1].filename,usern_read:username01,control:"1"}
+           	    };
+           	    
+           	    function check1(){
+           		    alert("你正在查看文件："+Piece_dict2.file[counter1].filename);
+           	    } 
+           	    
+           	    function displayf(data,textStatus){
+           	     //   var ssss=JSON.stringify(data);
+         	    //    alert(ssss);
+           	     //   Piece_dict2=data;
+           	     //   alert(Piece_dict2.file[counter1].read_authority);
+           	    	Piece_dict2=data;
+           	    	    if(Piece_dict2.file[counter1].read_authority){
+           	    	    	filecontent.value=Piece_dict2.file[counter1].file_content;
+           	    	    }
+           	    	    if(!Piece_dict2.file[counter1].read_authority){
+           	    	    //	alert("你没有文件："+Piece_dict2.file[counter1].filename+"的阅读权限！");
+           	    	        window.wxc.xcConfirm("你没有文件“"+Piece_dict2.file[counter1].filename+"”的阅读权限！","warning");
+           	    	    	filecontent.value="";
+           	    	    }
+           	    }
+           	    
+           	    $.ajax(options1);
+           	    
+           	             	    
+           	}
+ 
+           });
+                       
+
+
+            /*点击按钮后修改文件并提交*/
+            $("#btn1").on("click",function(){
+            	confirm_sign=false;
+            	if(filen.value=="none"){
+            		window.wxc.xcConfirm("你没有选择文件！","warning");
+            	}
+            	if(filen.value!="none"){           	       
+           	      var counter22;
+           		  for(i=0;i<Piece_dict2.file_num;i++){
+           			if(filen.value=="file"+i){
+           				counter22=i;
+           				confirm_sign=1;
+           				window.wxc.xcConfirm("你确认编辑文件“"+Piece_dict2.file[counter22].filename+"”吗？","confirm");
+           			}
+           		  }
+           		}           	   
+            });
+ 
+            //文件编辑函数
+            function editclick(){          	       
+           	    var counter2;
+           		for(i=0;i<Piece_dict2.file_num;i++){
+           			if(filen.value=="file"+i){
+           				counter2=i;
+           			}
+           		}
+          	    
+           	        var options2={
+           		        beforeSend:check2,  //测试用
+           		        success: showMess1,
+           		        type:"post",
+           		        dataType:"json",
+           		        data:{name_edit:Piece_dict2.file[counter2].filename,
+           		        	content_edit:filecontent.value,
+           		        	usern_edit:username01,
+           		        	control:"2"}
+
+           	        };
+           	    
+           	        function check2(){
+           		        confirm_sign=0;
+           	        }
+           	        
+           	        function showMess1(data,textStatus){
+           	        	Piece_dict2=data;
+           	        	if(Piece_dict2.file[counter2].edit_authority){
+           	        	//			alert("你已经成功修改了"+Piece_dict2.file[counter2].filename+"！");
+           	        	            window.wxc.xcConfirm("你已经成功修改了文件“"+Piece_dict2.file[counter2].filename+"”！","success");
+           	        	}
+           	        	if(!Piece_dict2.file[counter2].edit_authority){
+           	        	//			alert("你没有"+Piece_dict2.file[counter2].filename+"的修改权限！");
+           	        	            window.wxc.xcConfirm("你没有文件“"+Piece_dict2.file[counter2].filename+"”的修改权限！","error");
+           	        	}
+           	        }
+           	        
+           	         $.ajax(options2);
+           	             	                   	        
+
+            }
+            
+            
+            /*点击删除按钮后提交删除文件名*/
+           $("#btn2").on("click",function(){
+           	confirm_sign=false;
+           	if(filen.value=="none"){
+           		window.wxc.xcConfirm("你没有选择文件！","warning");
+           	}
+           	if(filen.value!="none"){
+
+           	    var counter33;
+           		for(i=0;i<Piece_dict2.file_num;i++){
+           			if(filen.value=="file"+i){
+           				counter33=i;
+           				confirm_sign=2;
+           				window.wxc.xcConfirm("你确认删除文件“"+Piece_dict2.file[counter33].filename+"”吗？","confirm");          				
+           			}
+           		}          	    
+            }
+           
+           });
+           
+           //文件删除函数
+           function deleclick(){
+           	    var counter3;
+           		for(i=0;i<Piece_dict2.file_num;i++){
+           			if(filen.value=="file"+i){
+           				counter3=i;
+           			}
+           		};
+           	    
+           	    var mm=Piece_dict2.file[counter3].filename;
+           	    
+           	    var options3={
+           	    	beforeSend:check3,
+           	    	success: showMess2,
+           	    	type:"post",
+           	    	dataType:"json",
+           	    	data:{
+           	    		filen_dele:mm,
+           	    		usern_dele:username01,
+           	    		control:"3"
+           	    	}
+           	    };
+           	    
+
+           	    function check3(){
+           	    	 confirm_sign=0;
+           	    }
+           	    
+           	    function showMess2(data,textStatus){
+           	                   	    //   var ssss=JSON.stringify(data);
+         	    // alert(ssss);
+           	    	Piece_dict2=data;
+           	    	if(Piece_dict2.delete_authority){
+           	    	//	alert("你已经删除了文件："+mm);
+           	    		window.wxc.xcConfirm("你已经成功删除了文件“"+mm+"”！","success");
+                        location.reload(true);
+           	    	}
+           	    	if(!Piece_dict2.delete_authority){
+           	    	//	alert("你没有删除该文件的权限！")
+           	    		window.wxc.xcConfirm("你没有删除该文件的权限！","error");
+           	    	}
+           	    }
+           	    
+           	    $.ajax(options3);
+           	    
+           
+ 
+           }
+
+
+
+          /*点击导航栏触发表单提交*/
+         $("#pointer1").on("click",function(){
+           	
+         window.location.href="/userinfo/?username="+username01;
+         });
+           
+        </script>
+		</div>
+
+	</body>
+</html>

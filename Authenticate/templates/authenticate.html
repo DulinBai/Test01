@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>auth</title>
+		<link rel="stylesheet" href="../static/css/authenticate.css"/>
+		<link rel="stylesheet" href="../static/css/normal.css" />
+		<link rel="stylesheet" href="../static/css/xcConfirm.css" />
+
+	</head>
+	<body>
+		<div class="page">
+
+			
+			
+			<!--页眉，西电图标-->
+			<header id="hder">
+				<img id="img01" src="../static/img/logo_tran@50px.png" width="359" height="80" />
+			</header>
+			<!--页眉结束-->
+			
+			<!--主体部分 -->
+			<div class="container">
+				<h1 id="title">欢迎登录云认证系统</h1>
+				
+				<!--输入文本框 -->
+				<form method="post" id="input" enctype="multipart/form-data" target="nm_iframe">
+					<fieldset>
+						<h2 class="hdr-account">认证</h2>
+						<div class="fields">
+							<p class="row">
+								<label for="username">登录账号：</label>
+								<input type="text" id="username" name="username" class="field-large" required autofocus/>
+							</p>
+							<p class="row" id="scheme">
+								<label for="state1">认证方式：</label>
+								<select id="state1" name="state1">
+									<option value="token">基于口令</option>
+									<option value="iden">基于身份</option>
+									<option value="RSA">基于RSA算法</option>
+									<option value="ElGam">基于ElGamal算法</option>
+									<option value="ECDSA">基于ECDSA算法</option>
+								</select>
+							</p>
+							<p class="row" hidden>
+								<label for="state2">加密方式：</label>
+								<select id="state2" name="state2">
+									<option value="DES">DES密钥</option>
+									<option value="DES3">三重DES</option>
+									<option value="AES">AES密钥</option>
+								</select>
+							</p>
+							<p class="row" id="dispass">
+								<label for="password">登录密码：</label>
+								<input type="password" id="password" name="password" class="field-large" placeholder="仅口令方式需要"  />
+							</p>
+							<p class="row" id="certificate" hidden>
+								<label for="file">证书文件：</label>
+								<input type="file" id="file" name="file" class="field-large"/>
+							</p>
+						</div>
+					</fieldset>
+				
+				<!--提交按钮-->
+				<input type="submit" value="认证" id="btn1"/>
+				<a href="/register/"><input type="button" value="注册" id="btn2"/></a>
+				<!--结束提交按钮-->
+				
+				</form>
+			<!--结束输入文本框-->
+
+			</div>
+			<!--主体部分结束-->
+		 <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>	
+		</div> 
+		<script type="text/javascript">
+			function okclick(){
+				
+			}
+			function cancelclick(){
+				
+			}
+		</script>
+		<script type="text/javascript" src="../static/js/jquery-3.2.0.js"></script>
+		<script type="text/javascript" src="../static/js/xcConfirm.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.form.js"></script>
+		<script type="text/javascript" >
+			var form =document.getElementById("input");  //表单元素
+            var token=form.elements["state1"];          //认证选择内容
+            var password=form.elements["password"];    //密码输入框元素
+            var file=form.elements["file"];           //文件上传框元素
+            var dispassword =document.getElementById("dispass");  //密码行的段落元素
+            var subcertificate=document.getElementById("certificate");  //上传框的段落元素
+            var scheme=document.getElementById("scheme");     //认证选择框元素
+            
+            var options={
+//          	beforeSubmit:check3,
+          	    success:  check4,
+            	timeout:   3000,
+            	dataType:'json'
+            };
+            
+//          var Piece_dict3 = {{Piece_dict3|safe}};
+            
+//选择口令方式未输入密码，或者其它方式未上传证书,验证用户账号的正确
+            form.onsubmit=function check1(){	
+	          if (token.value=="token"){
+		           if(password.value==null||password.value==""){
+			       window.wxc.xcConfirm("请输入密码！","error"); 
+			       password.focus();
+			       return false;
+		        }
+	          }
+	          if(token.value!="token"){
+		      if (file.value==null||file.value==""){
+			    window.wxc.xcConfirm("请选择证书！","error"); 
+			    return false;
+		        }
+		      }
+	          $("#input").ajaxSubmit(options);
+	          return false;
+            }
+
+//密码框与证书框的显示与隐藏
+            scheme.onclick=function check2(){
+ 	        if(token.value!="token"){
+		       dispassword.setAttribute("hidden",true);
+		       subcertificate.removeAttribute("hidden");
+	        }
+	
+	        else{
+		        subcertificate.setAttribute("hidden",true);
+		        dispassword.removeAttribute("hidden");
+	        }
+        }
+                   
+//测试函数
+//          function check3(){
+//          	alert("你正在提交表单！");
+//          	return true;
+//          }
+            
+//对用户信息进行判断 
+          function check4(data){
+          	if(!data.flag_user){
+          	//	alert("用户账号错误，请重新输入！");
+                  window.wxc.xcConfirm("用户账号错误，请重新输入！","error");
+          	}
+          	if(!data.flag_pass){
+          	//	alert("用户密码错误，请重新输入！");
+                  window.wxc.xcConfirm("用户密码错误，请重新输入！","error");
+          	}
+          	if(!data.flag_cert){
+          	//	alert("用户证书错误，请重新选择证书！");
+                  window.wxc.xcConfirm("用户证书错误，请重新上传！","error");
+          	}
+          	if(data.flag_user&&data.flag_pass&&data.flag_cert){
+          	    window.location.href="/userinfo/?username="+$("#username").val();
+            }
+         }
+		</script>
+	</body>
+</html>
